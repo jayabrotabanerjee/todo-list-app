@@ -19,4 +19,6 @@ Deployment :
 
 ![CDK Deployment](pics/CDK%20deployment.png)
 
+
+
 ![Creation of objects in AWS](pics/creation%20of%20objects%20in%20AWS.png)
