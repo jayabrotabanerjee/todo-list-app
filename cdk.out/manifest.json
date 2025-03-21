@@ -1,0 +1,658 @@
+{
+  "version": "40.0.0",
+  "artifacts": {
+    "TodoListAppStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "TodoListAppStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "TodoListAppStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://039612889764/ap-south-1",
+      "properties": {
+        "templateFile": "TodoListAppStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::039612889764:role/cdk-hnb659fds-deploy-role-039612889764-ap-south-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::039612889764:role/cdk-hnb659fds-cfn-exec-role-039612889764-ap-south-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-039612889764-ap-south-1/90e1e546ff81a47dd413e4042c96b6e92a3a8e49c209f8cbb75070d28d137785.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "TodoListAppStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::039612889764:role/cdk-hnb659fds-lookup-role-039612889764-ap-south-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "TodoListAppStack.assets"
+      ],
+      "metadata": {
+        "/TodoListAppStack/TodoList_customRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoListcustomRole30B89CB8"
+          }
+        ],
+        "/TodoListAppStack/TodoListFrontEnd/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoListFrontEnd38DD84B1"
+          }
+        ],
+        "/TodoListAppStack/TodoListFrontEnd/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoListFrontEndPolicy45E82C0D"
+          }
+        ],
+        "/TodoListAppStack/TodoListFrontEnd/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoListFrontEndAutoDeleteObjectsCustomResource8ABAE04D"
+          }
+        ],
+        "/TodoListAppStack/Custom::S3AutoDeleteObjectsCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/TodoListAppStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/TodoListAppStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
+        "/TodoListAppStack/WebTodoListApplication/AwsCliLayer/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebTodoListApplicationAwsCliLayer0B7DEB67"
+          }
+        ],
+        "/TodoListAppStack/WebTodoListApplication/CustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebTodoListApplicationCustomResourceD93FD45E"
+          }
+        ],
+        "/TodoListAppStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-singleton",
+            "data": true
+          },
+          {
+            "type": "aws:cdk:is-custom-resource-handler-runtime-family",
+            "data": 2
+          }
+        ],
+        "/TodoListAppStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+          }
+        ],
+        "/TodoListAppStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF"
+          }
+        ],
+        "/TodoListAppStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536"
+          }
+        ],
+        "/TodoListAppStack/TodoListUsersTable": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "TodoListUsersTable4E2EB2E8"
+            }
+          }
+        ],
+        "/TodoListAppStack/TodoListUsersTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoListUsersTable4E2EB2E8"
+          }
+        ],
+        "/TodoListAppStack/TodoListTasksTable": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "TodoListTasksTableC1B330F0"
+            }
+          }
+        ],
+        "/TodoListAppStack/TodoListTasksTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoListTasksTableC1B330F0"
+          }
+        ],
+        "/TodoListAppStack/TodoListFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoListFunctionServiceRole65D42543"
+          }
+        ],
+        "/TodoListAppStack/TodoListFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoListFunctionServiceRoleDefaultPolicy558740E5"
+          }
+        ],
+        "/TodoListAppStack/TodoListFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoListFunctionDE711C4E"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapi68AF87AD"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/CloudWatchRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiCloudWatchRoleB2C028A6"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Account": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiAccount64CA8DD8"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiDeploymentB800E5F2b0fae8ceb4933b9b7f574fe05f3f027a"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiDeploymentStageprod176B26AA"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiEndpointB502C690"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/OPTIONS": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "addMethodResponse called multiple times with statusCode=200, deployment will be nondeterministic. Use a single addMethodResponse call to configure the entire response. [ack: @aws-cdk/aws-apigateway:duplicateStatusCodes]",
+            "trace": [
+              "Annotations.addMessage (/root/aws-todo-list-app/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1608)",
+              "Annotations.addWarningV2 (/root/aws-todo-list-app/node_modules/aws-cdk-lib/core/lib/annotations.js:1:825)",
+              "Method.addMethodResponse (/root/aws-todo-list-app/node_modules/aws-cdk-lib/aws-apigateway/lib/method.js:1:5367)",
+              "Method.descriptor.value (/root/aws-todo-list-app/node_modules/aws-cdk-lib/core/lib/metadata-resource.js:1:2296)",
+              "/root/aws-todo-list-app/lib/stacks/todo-list-stack.ts:167:44",
+              "Array.forEach (<anonymous>)",
+              "new TodoListAppStack (/root/aws-todo-list-app/lib/stacks/todo-list-stack.ts:167:17)",
+              "Object.<anonymous> (/root/aws-todo-list-app/bin/todo-list.ts:7:1)",
+              "Module._compile (node:internal/modules/cjs/loader:1469:14)",
+              "Module.m._compile (/root/aws-todo-list-app/node_modules/ts-node/src/index.ts:1618:23)",
+              "Module._extensions..js (node:internal/modules/cjs/loader:1548:10)",
+              "Object.require.extensions.<computed> [as .ts] (/root/aws-todo-list-app/node_modules/ts-node/src/index.ts:1621:12)",
+              "Module.load (node:internal/modules/cjs/loader:1288:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:1104:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:173:12)",
+              "phase4 (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:649:14)",
+              "bootstrap (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:95:10)",
+              "main (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:55:10)",
+              "Object.<anonymous> (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:800:3)",
+              "Module._compile (node:internal/modules/cjs/loader:1469:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1548:10)",
+              "Module.load (node:internal/modules/cjs/loader:1288:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:1104:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:173:12)",
+              "node:internal/main/run_main_module:28:49"
+            ]
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiOPTIONSB19B7895"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitasks95CF4155"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/OPTIONS": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "addMethodResponse called multiple times with statusCode=200, deployment will be nondeterministic. Use a single addMethodResponse call to configure the entire response. [ack: @aws-cdk/aws-apigateway:duplicateStatusCodes]",
+            "trace": [
+              "Annotations.addMessage (/root/aws-todo-list-app/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1608)",
+              "Annotations.addWarningV2 (/root/aws-todo-list-app/node_modules/aws-cdk-lib/core/lib/annotations.js:1:825)",
+              "Method.addMethodResponse (/root/aws-todo-list-app/node_modules/aws-cdk-lib/aws-apigateway/lib/method.js:1:5367)",
+              "Method.descriptor.value (/root/aws-todo-list-app/node_modules/aws-cdk-lib/core/lib/metadata-resource.js:1:2296)",
+              "/root/aws-todo-list-app/lib/stacks/todo-list-stack.ts:167:44",
+              "Array.forEach (<anonymous>)",
+              "new TodoListAppStack (/root/aws-todo-list-app/lib/stacks/todo-list-stack.ts:167:17)",
+              "Object.<anonymous> (/root/aws-todo-list-app/bin/todo-list.ts:7:1)",
+              "Module._compile (node:internal/modules/cjs/loader:1469:14)",
+              "Module.m._compile (/root/aws-todo-list-app/node_modules/ts-node/src/index.ts:1618:23)",
+              "Module._extensions..js (node:internal/modules/cjs/loader:1548:10)",
+              "Object.require.extensions.<computed> [as .ts] (/root/aws-todo-list-app/node_modules/ts-node/src/index.ts:1621:12)",
+              "Module.load (node:internal/modules/cjs/loader:1288:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:1104:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:173:12)",
+              "phase4 (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:649:14)",
+              "bootstrap (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:95:10)",
+              "main (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:55:10)",
+              "Object.<anonymous> (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:800:3)",
+              "Module._compile (node:internal/modules/cjs/loader:1469:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1548:10)",
+              "Module.load (node:internal/modules/cjs/loader:1288:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:1104:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:173:12)",
+              "node:internal/main/run_main_module:28:49"
+            ]
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitasksOPTIONSA68A3530"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/GET/ApiPermission.TodoListAppStacktodolistapi6A487432.GET..tasks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitasksGETApiPermissionTodoListAppStacktodolistapi6A487432GETtasks949DF2F6"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/GET/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.GET..tasks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitasksGETApiPermissionTestTodoListAppStacktodolistapi6A487432GETtasks8415DDF1"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitasksGET983EF8E2"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/POST/ApiPermission.TodoListAppStacktodolistapi6A487432.POST..tasks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitasksPOSTApiPermissionTodoListAppStacktodolistapi6A487432POSTtasksFE8F8AA0"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/POST/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.POST..tasks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitasksPOSTApiPermissionTestTodoListAppStacktodolistapi6A487432POSTtasks85DF64A0"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitasksPOSTD6F817A1"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/DELETE/ApiPermission.TodoListAppStacktodolistapi6A487432.DELETE..tasks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitasksDELETEApiPermissionTodoListAppStacktodolistapi6A487432DELETEtasksC052F779"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/DELETE/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.DELETE..tasks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitasksDELETEApiPermissionTestTodoListAppStacktodolistapi6A487432DELETEtasks5F4520ED"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/DELETE/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitasksDELETE8A2992E6"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/{task_id}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitaskstaskid8B1D5B13"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/{task_id}/OPTIONS": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "addMethodResponse called multiple times with statusCode=200, deployment will be nondeterministic. Use a single addMethodResponse call to configure the entire response. [ack: @aws-cdk/aws-apigateway:duplicateStatusCodes]",
+            "trace": [
+              "Annotations.addMessage (/root/aws-todo-list-app/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1608)",
+              "Annotations.addWarningV2 (/root/aws-todo-list-app/node_modules/aws-cdk-lib/core/lib/annotations.js:1:825)",
+              "Method.addMethodResponse (/root/aws-todo-list-app/node_modules/aws-cdk-lib/aws-apigateway/lib/method.js:1:5367)",
+              "Method.descriptor.value (/root/aws-todo-list-app/node_modules/aws-cdk-lib/core/lib/metadata-resource.js:1:2296)",
+              "/root/aws-todo-list-app/lib/stacks/todo-list-stack.ts:167:44",
+              "Array.forEach (<anonymous>)",
+              "new TodoListAppStack (/root/aws-todo-list-app/lib/stacks/todo-list-stack.ts:167:17)",
+              "Object.<anonymous> (/root/aws-todo-list-app/bin/todo-list.ts:7:1)",
+              "Module._compile (node:internal/modules/cjs/loader:1469:14)",
+              "Module.m._compile (/root/aws-todo-list-app/node_modules/ts-node/src/index.ts:1618:23)",
+              "Module._extensions..js (node:internal/modules/cjs/loader:1548:10)",
+              "Object.require.extensions.<computed> [as .ts] (/root/aws-todo-list-app/node_modules/ts-node/src/index.ts:1621:12)",
+              "Module.load (node:internal/modules/cjs/loader:1288:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:1104:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:173:12)",
+              "phase4 (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:649:14)",
+              "bootstrap (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:95:10)",
+              "main (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:55:10)",
+              "Object.<anonymous> (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:800:3)",
+              "Module._compile (node:internal/modules/cjs/loader:1469:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1548:10)",
+              "Module.load (node:internal/modules/cjs/loader:1288:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:1104:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:173:12)",
+              "node:internal/main/run_main_module:28:49"
+            ]
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/{task_id}/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitaskstaskidOPTIONS33BE9C84"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/{task_id}/GET/ApiPermission.TodoListAppStacktodolistapi6A487432.GET..tasks.{task_id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitaskstaskidGETApiPermissionTodoListAppStacktodolistapi6A487432GETtaskstaskidE1F41B9A"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/{task_id}/GET/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.GET..tasks.{task_id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitaskstaskidGETApiPermissionTestTodoListAppStacktodolistapi6A487432GETtaskstaskid3B07A8EF"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/{task_id}/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitaskstaskidGET34D76EF5"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/{task_id}/POST/ApiPermission.TodoListAppStacktodolistapi6A487432.POST..tasks.{task_id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitaskstaskidPOSTApiPermissionTodoListAppStacktodolistapi6A487432POSTtaskstaskid81EC65BB"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/{task_id}/POST/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.POST..tasks.{task_id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitaskstaskidPOSTApiPermissionTestTodoListAppStacktodolistapi6A487432POSTtaskstaskid711AC55D"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/{task_id}/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitaskstaskidPOST8E65F747"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/{task_id}/DELETE/ApiPermission.TodoListAppStacktodolistapi6A487432.DELETE..tasks.{task_id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitaskstaskidDELETEApiPermissionTodoListAppStacktodolistapi6A487432DELETEtaskstaskidDDA836FA"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/{task_id}/DELETE/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.DELETE..tasks.{task_id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitaskstaskidDELETEApiPermissionTestTodoListAppStacktodolistapi6A487432DELETEtaskstaskid5F0D4B28"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/tasks/{task_id}/DELETE/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitaskstaskidDELETEB0D94C21"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiusers7A4C2691"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/OPTIONS": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "addMethodResponse called multiple times with statusCode=200, deployment will be nondeterministic. Use a single addMethodResponse call to configure the entire response. [ack: @aws-cdk/aws-apigateway:duplicateStatusCodes]",
+            "trace": [
+              "Annotations.addMessage (/root/aws-todo-list-app/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1608)",
+              "Annotations.addWarningV2 (/root/aws-todo-list-app/node_modules/aws-cdk-lib/core/lib/annotations.js:1:825)",
+              "Method.addMethodResponse (/root/aws-todo-list-app/node_modules/aws-cdk-lib/aws-apigateway/lib/method.js:1:5367)",
+              "Method.descriptor.value (/root/aws-todo-list-app/node_modules/aws-cdk-lib/core/lib/metadata-resource.js:1:2296)",
+              "/root/aws-todo-list-app/lib/stacks/todo-list-stack.ts:167:44",
+              "Array.forEach (<anonymous>)",
+              "new TodoListAppStack (/root/aws-todo-list-app/lib/stacks/todo-list-stack.ts:167:17)",
+              "Object.<anonymous> (/root/aws-todo-list-app/bin/todo-list.ts:7:1)",
+              "Module._compile (node:internal/modules/cjs/loader:1469:14)",
+              "Module.m._compile (/root/aws-todo-list-app/node_modules/ts-node/src/index.ts:1618:23)",
+              "Module._extensions..js (node:internal/modules/cjs/loader:1548:10)",
+              "Object.require.extensions.<computed> [as .ts] (/root/aws-todo-list-app/node_modules/ts-node/src/index.ts:1621:12)",
+              "Module.load (node:internal/modules/cjs/loader:1288:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:1104:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:173:12)",
+              "phase4 (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:649:14)",
+              "bootstrap (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:95:10)",
+              "main (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:55:10)",
+              "Object.<anonymous> (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:800:3)",
+              "Module._compile (node:internal/modules/cjs/loader:1469:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1548:10)",
+              "Module.load (node:internal/modules/cjs/loader:1288:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:1104:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:173:12)",
+              "node:internal/main/run_main_module:28:49"
+            ]
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiusersOPTIONSF6C3896F"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/GET/ApiPermission.TodoListAppStacktodolistapi6A487432.GET..users": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiusersGETApiPermissionTodoListAppStacktodolistapi6A487432GETusers2E0877C2"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/GET/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.GET..users": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiusersGETApiPermissionTestTodoListAppStacktodolistapi6A487432GETusersAB5BAF1C"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiusersGETF6222B02"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/POST/ApiPermission.TodoListAppStacktodolistapi6A487432.POST..users": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiusersPOSTApiPermissionTodoListAppStacktodolistapi6A487432POSTusersF022FE1F"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/POST/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.POST..users": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiusersPOSTApiPermissionTestTodoListAppStacktodolistapi6A487432POSTusersE4F6B563"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiusersPOST7857B2C1"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/{user_id}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiusersuseridEB6ECFDD"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/{user_id}/OPTIONS": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "addMethodResponse called multiple times with statusCode=200, deployment will be nondeterministic. Use a single addMethodResponse call to configure the entire response. [ack: @aws-cdk/aws-apigateway:duplicateStatusCodes]",
+            "trace": [
+              "Annotations.addMessage (/root/aws-todo-list-app/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1608)",
+              "Annotations.addWarningV2 (/root/aws-todo-list-app/node_modules/aws-cdk-lib/core/lib/annotations.js:1:825)",
+              "Method.addMethodResponse (/root/aws-todo-list-app/node_modules/aws-cdk-lib/aws-apigateway/lib/method.js:1:5367)",
+              "Method.descriptor.value (/root/aws-todo-list-app/node_modules/aws-cdk-lib/core/lib/metadata-resource.js:1:2296)",
+              "/root/aws-todo-list-app/lib/stacks/todo-list-stack.ts:167:44",
+              "Array.forEach (<anonymous>)",
+              "new TodoListAppStack (/root/aws-todo-list-app/lib/stacks/todo-list-stack.ts:167:17)",
+              "Object.<anonymous> (/root/aws-todo-list-app/bin/todo-list.ts:7:1)",
+              "Module._compile (node:internal/modules/cjs/loader:1469:14)",
+              "Module.m._compile (/root/aws-todo-list-app/node_modules/ts-node/src/index.ts:1618:23)",
+              "Module._extensions..js (node:internal/modules/cjs/loader:1548:10)",
+              "Object.require.extensions.<computed> [as .ts] (/root/aws-todo-list-app/node_modules/ts-node/src/index.ts:1621:12)",
+              "Module.load (node:internal/modules/cjs/loader:1288:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:1104:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:173:12)",
+              "phase4 (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:649:14)",
+              "bootstrap (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:95:10)",
+              "main (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:55:10)",
+              "Object.<anonymous> (/root/aws-todo-list-app/node_modules/ts-node/src/bin.ts:800:3)",
+              "Module._compile (node:internal/modules/cjs/loader:1469:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1548:10)",
+              "Module.load (node:internal/modules/cjs/loader:1288:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:1104:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:173:12)",
+              "node:internal/main/run_main_module:28:49"
+            ]
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/{user_id}/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiusersuseridOPTIONSFB5C5D19"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/{user_id}/POST/ApiPermission.TodoListAppStacktodolistapi6A487432.POST..users.{user_id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiusersuseridPOSTApiPermissionTodoListAppStacktodolistapi6A487432POSTusersuserid8A12D2AB"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/{user_id}/POST/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.POST..users.{user_id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiusersuseridPOSTApiPermissionTestTodoListAppStacktodolistapi6A487432POSTusersuserid1A8C17AA"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/{user_id}/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiusersuseridPOSTA31424B0"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/{user_id}/DELETE/ApiPermission.TodoListAppStacktodolistapi6A487432.DELETE..users.{user_id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiusersuseridDELETEApiPermissionTodoListAppStacktodolistapi6A487432DELETEusersuserid92D2EF33"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/{user_id}/DELETE/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.DELETE..users.{user_id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiusersuseridDELETEApiPermissionTestTodoListAppStacktodolistapi6A487432DELETEusersuserid05BEB1BD"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/Default/users/{user_id}/DELETE/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiusersuseridDELETEC06898B9"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/todo-list-usage-plan/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitodolistusageplanD2E634E3"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/todo-list-usage-plan/UsagePlanKeyResource:TodoListAppStacktodolistapitodolistapikey5912AD19": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitodolistusageplanUsagePlanKeyResourceTodoListAppStacktodolistapitodolistapikey5912AD19D30E5ED7"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/todo-list-api-key/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapitodolistapikey690B5397"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/TodoListApiResponseModel/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiTodoListApiResponseModel20731B8B"
+          }
+        ],
+        "/TodoListAppStack/todo-list-api/TodoListApiErrorResponseModel/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "todolistapiTodoListApiErrorResponseModelBA254C5D"
+          }
+        ],
+        "/TodoListAppStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/TodoListAppStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/TodoListAppStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "TodoListAppStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

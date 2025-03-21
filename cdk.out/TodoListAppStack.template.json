@@ -1,0 +1,2657 @@
+{
+ "Resources": {
+  "TodoListcustomRole30B89CB8": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "RoleName": "TodoList_customRole"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/TodoList_customRole/Resource"
+   }
+  },
+  "TodoListFrontEnd38DD84B1": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketEncryption": {
+     "ServerSideEncryptionConfiguration": [
+      {
+       "ServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "AES256"
+       }
+      }
+     ]
+    },
+    "BucketName": "todo-list-app-dev",
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": true,
+     "BlockPublicPolicy": true,
+     "IgnorePublicAcls": true,
+     "RestrictPublicBuckets": true
+    },
+    "Tags": [
+     {
+      "Key": "aws-cdk:auto-delete-objects",
+      "Value": "true"
+     },
+     {
+      "Key": "aws-cdk:cr-owned:2c20f900",
+      "Value": "true"
+     }
+    ],
+    "WebsiteConfiguration": {
+     "ErrorDocument": "error.html",
+     "IndexDocument": "index.html"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/TodoListFrontEnd/Resource"
+   }
+  },
+  "TodoListFrontEndPolicy45E82C0D": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "TodoListFrontEnd38DD84B1"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:PutBucketPolicy"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::GetAtt": [
+          "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+          "Arn"
+         ]
+        }
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "TodoListFrontEnd38DD84B1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "TodoListFrontEnd38DD84B1",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/TodoListFrontEnd/Policy/Resource"
+   }
+  },
+  "TodoListFrontEndAutoDeleteObjectsCustomResource8ABAE04D": {
+   "Type": "Custom::S3AutoDeleteObjects",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+      "Arn"
+     ]
+    },
+    "BucketName": {
+     "Ref": "TodoListFrontEnd38DD84B1"
+    }
+   },
+   "DependsOn": [
+    "TodoListFrontEndPolicy45E82C0D"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/TodoListFrontEnd/AutoDeleteObjectsCustomResource/Default"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-039612889764-ap-south-1",
+     "S3Key": "faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Description": {
+     "Fn::Join": [
+      "",
+      [
+       "Lambda function for auto-deleting objects in ",
+       {
+        "Ref": "TodoListFrontEnd38DD84B1"
+       },
+       " S3 bucket."
+      ]
+     ]
+    }
+   },
+   "DependsOn": [
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6",
+    "aws:asset:property": "Code"
+   }
+  },
+  "WebTodoListApplicationAwsCliLayer0B7DEB67": {
+   "Type": "AWS::Lambda::LayerVersion",
+   "Properties": {
+    "Content": {
+     "S3Bucket": "cdk-hnb659fds-assets-039612889764-ap-south-1",
+     "S3Key": "11c5049f0fcd53c098101a7401ac0c9ac8d4cebab31bfe36cda71857b189a86f.zip"
+    },
+    "Description": "/opt/awscli/aws"
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/WebTodoListApplication/AwsCliLayer/Resource",
+    "aws:asset:path": "asset.11c5049f0fcd53c098101a7401ac0c9ac8d4cebab31bfe36cda71857b189a86f.zip",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Content"
+   }
+  },
+  "WebTodoListApplicationCustomResourceD93FD45E": {
+   "Type": "Custom::CDKBucketDeployment",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536",
+      "Arn"
+     ]
+    },
+    "SourceBucketNames": [
+     "cdk-hnb659fds-assets-039612889764-ap-south-1"
+    ],
+    "SourceObjectKeys": [
+     "67cdac287978f93df887f9de8dbc0c5a546aa380e826728b342991ad1204aa08.zip"
+    ],
+    "DestinationBucketName": {
+     "Ref": "TodoListFrontEnd38DD84B1"
+    },
+    "Prune": true,
+    "OutputObjectKeys": true
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/WebTodoListApplication/CustomResource/Default"
+   }
+  },
+  "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource"
+   }
+  },
+  "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":s3:::cdk-hnb659fds-assets-039612889764-ap-south-1"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":s3:::cdk-hnb659fds-assets-039612889764-ap-south-1/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "TodoListFrontEnd38DD84B1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "TodoListFrontEnd38DD84B1",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+    "Roles": [
+     {
+      "Ref": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-039612889764-ap-south-1",
+     "S3Key": "4fe0aba5e672b596d0f72505a9eec502f98d46906bb30fae2511fbdc1df4956f.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "AWS_CA_BUNDLE": "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"
+     }
+    },
+    "Handler": "index.handler",
+    "Layers": [
+     {
+      "Ref": "WebTodoListApplicationAwsCliLayer0B7DEB67"
+     }
+    ],
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.11",
+    "Timeout": 900
+   },
+   "DependsOn": [
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource",
+    "aws:asset:path": "asset.4fe0aba5e672b596d0f72505a9eec502f98d46906bb30fae2511fbdc1df4956f",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "TodoListUsersTable4E2EB2E8": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "id",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+     }
+    ],
+    "TableName": "todo-list-users"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/TodoListUsersTable/Resource"
+   }
+  },
+  "TodoListTasksTableC1B330F0": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "id",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+     }
+    ],
+    "TableName": "todo-list-tasks"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/TodoListTasksTable/Resource"
+   }
+  },
+  "TodoListFunctionServiceRole65D42543": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/TodoListFunction/ServiceRole/Resource"
+   }
+  },
+  "TodoListFunctionServiceRoleDefaultPolicy558740E5": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "TodoListTasksTableC1B330F0",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "TodoListUsersTable4E2EB2E8",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "TodoListFunctionServiceRoleDefaultPolicy558740E5",
+    "Roles": [
+     {
+      "Ref": "TodoListFunctionServiceRole65D42543"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/TodoListFunction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "TodoListFunctionDE711C4E": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-039612889764-ap-south-1",
+     "S3Key": "583525f28af3995ac6fd13913cadd3d8e8089b5ad265a88690430dea3fedfa03.zip"
+    },
+    "Description": "Triggered when there is an API request",
+    "Environment": {
+     "Variables": {
+      "USERS_TABLE": {
+       "Ref": "TodoListUsersTable4E2EB2E8"
+      },
+      "TASKS_TABLE": {
+       "Ref": "TodoListTasksTableC1B330F0"
+      }
+     }
+    },
+    "FunctionName": "TodoListApplication",
+    "Handler": "todoList",
+    "MemorySize": 1024,
+    "Role": {
+     "Fn::GetAtt": [
+      "TodoListFunctionServiceRole65D42543",
+      "Arn"
+     ]
+    },
+    "Runtime": "go1.x",
+    "Timeout": 60
+   },
+   "DependsOn": [
+    "TodoListFunctionServiceRoleDefaultPolicy558740E5",
+    "TodoListFunctionServiceRole65D42543"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/TodoListFunction/Resource",
+    "aws:asset:path": "asset.583525f28af3995ac6fd13913cadd3d8e8089b5ad265a88690430dea3fedfa03",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "todolistapi68AF87AD": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "ApiKeySourceType": "HEADER",
+    "Description": "Holds all the requests coming from the API for Todo List Application",
+    "Name": "todo-list-api"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Resource"
+   }
+  },
+  "todolistapiCloudWatchRoleB2C028A6": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+       ]
+      ]
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/CloudWatchRole/Resource"
+   }
+  },
+  "todolistapiAccount64CA8DD8": {
+   "Type": "AWS::ApiGateway::Account",
+   "Properties": {
+    "CloudWatchRoleArn": {
+     "Fn::GetAtt": [
+      "todolistapiCloudWatchRoleB2C028A6",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "todolistapi68AF87AD"
+   ],
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Account"
+   }
+  },
+  "todolistapiDeploymentB800E5F2b0fae8ceb4933b9b7f574fe05f3f027a": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "Holds all the requests coming from the API for Todo List Application",
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "DependsOn": [
+    "todolistapiOPTIONSB19B7895",
+    "todolistapitaskstaskidDELETEB0D94C21",
+    "todolistapitaskstaskidGET34D76EF5",
+    "todolistapitaskstaskidOPTIONS33BE9C84",
+    "todolistapitaskstaskidPOST8E65F747",
+    "todolistapitaskstaskid8B1D5B13",
+    "todolistapitasksDELETE8A2992E6",
+    "todolistapitasksGET983EF8E2",
+    "todolistapitasksOPTIONSA68A3530",
+    "todolistapitasksPOSTD6F817A1",
+    "todolistapitasks95CF4155",
+    "todolistapiusersuseridDELETEC06898B9",
+    "todolistapiusersuseridOPTIONSFB5C5D19",
+    "todolistapiusersuseridPOSTA31424B0",
+    "todolistapiusersuseridEB6ECFDD",
+    "todolistapiusersGETF6222B02",
+    "todolistapiusersOPTIONSF6C3896F",
+    "todolistapiusersPOST7857B2C1",
+    "todolistapiusers7A4C2691",
+    "todolistapiTodoListApiErrorResponseModelBA254C5D",
+    "todolistapiTodoListApiResponseModel20731B8B"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Deployment/Resource"
+   }
+  },
+  "todolistapiDeploymentStageprod176B26AA": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "todolistapiDeploymentB800E5F2b0fae8ceb4933b9b7f574fe05f3f027a"
+    },
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    },
+    "StageName": "prod"
+   },
+   "DependsOn": [
+    "todolistapiAccount64CA8DD8"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/DeploymentStage.prod/Resource"
+   }
+  },
+  "todolistapiOPTIONSB19B7895": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Api-Key,user_id,task_id'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,DELETE,OPTIONS'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiResponseModel20731B8B"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiErrorResponseModelBA254C5D"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "400"
+     }
+    ],
+    "ResourceId": {
+     "Fn::GetAtt": [
+      "todolistapi68AF87AD",
+      "RootResourceId"
+     ]
+    },
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/OPTIONS/Resource"
+   }
+  },
+  "todolistapitasks95CF4155": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "todolistapi68AF87AD",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "tasks",
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/Resource"
+   }
+  },
+  "todolistapitasksOPTIONSA68A3530": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Api-Key,user_id,task_id'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,DELETE,OPTIONS'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiResponseModel20731B8B"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiErrorResponseModelBA254C5D"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "400"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "todolistapitasks95CF4155"
+    },
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/OPTIONS/Resource"
+   }
+  },
+  "todolistapitasksGETApiPermissionTodoListAppStacktodolistapi6A487432GETtasks949DF2F6": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/",
+       {
+        "Ref": "todolistapiDeploymentStageprod176B26AA"
+       },
+       "/GET/tasks"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/GET/ApiPermission.TodoListAppStacktodolistapi6A487432.GET..tasks"
+   }
+  },
+  "todolistapitasksGETApiPermissionTestTodoListAppStacktodolistapi6A487432GETtasks8415DDF1": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/test-invoke-stage/GET/tasks"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/GET/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.GET..tasks"
+   }
+  },
+  "todolistapitasksGET983EF8E2": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": true,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-south-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "TodoListFunctionDE711C4E",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiResponseModel20731B8B"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiErrorResponseModelBA254C5D"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "400"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "todolistapitasks95CF4155"
+    },
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/GET/Resource"
+   }
+  },
+  "todolistapitasksPOSTApiPermissionTodoListAppStacktodolistapi6A487432POSTtasksFE8F8AA0": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/",
+       {
+        "Ref": "todolistapiDeploymentStageprod176B26AA"
+       },
+       "/POST/tasks"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/POST/ApiPermission.TodoListAppStacktodolistapi6A487432.POST..tasks"
+   }
+  },
+  "todolistapitasksPOSTApiPermissionTestTodoListAppStacktodolistapi6A487432POSTtasks85DF64A0": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/test-invoke-stage/POST/tasks"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/POST/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.POST..tasks"
+   }
+  },
+  "todolistapitasksPOSTD6F817A1": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": true,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-south-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "TodoListFunctionDE711C4E",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiResponseModel20731B8B"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiErrorResponseModelBA254C5D"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "400"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "todolistapitasks95CF4155"
+    },
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/POST/Resource"
+   }
+  },
+  "todolistapitasksDELETEApiPermissionTodoListAppStacktodolistapi6A487432DELETEtasksC052F779": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/",
+       {
+        "Ref": "todolistapiDeploymentStageprod176B26AA"
+       },
+       "/DELETE/tasks"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/DELETE/ApiPermission.TodoListAppStacktodolistapi6A487432.DELETE..tasks"
+   }
+  },
+  "todolistapitasksDELETEApiPermissionTestTodoListAppStacktodolistapi6A487432DELETEtasks5F4520ED": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/test-invoke-stage/DELETE/tasks"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/DELETE/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.DELETE..tasks"
+   }
+  },
+  "todolistapitasksDELETE8A2992E6": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": true,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "DELETE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-south-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "TodoListFunctionDE711C4E",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiResponseModel20731B8B"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiErrorResponseModelBA254C5D"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "400"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "todolistapitasks95CF4155"
+    },
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/DELETE/Resource"
+   }
+  },
+  "todolistapitaskstaskid8B1D5B13": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "todolistapitasks95CF4155"
+    },
+    "PathPart": "{task_id}",
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/{task_id}/Resource"
+   }
+  },
+  "todolistapitaskstaskidOPTIONS33BE9C84": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Api-Key,user_id,task_id'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,DELETE,OPTIONS'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiResponseModel20731B8B"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiErrorResponseModelBA254C5D"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "400"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "todolistapitaskstaskid8B1D5B13"
+    },
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/{task_id}/OPTIONS/Resource"
+   }
+  },
+  "todolistapitaskstaskidGETApiPermissionTodoListAppStacktodolistapi6A487432GETtaskstaskidE1F41B9A": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/",
+       {
+        "Ref": "todolistapiDeploymentStageprod176B26AA"
+       },
+       "/GET/tasks/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/{task_id}/GET/ApiPermission.TodoListAppStacktodolistapi6A487432.GET..tasks.{task_id}"
+   }
+  },
+  "todolistapitaskstaskidGETApiPermissionTestTodoListAppStacktodolistapi6A487432GETtaskstaskid3B07A8EF": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/test-invoke-stage/GET/tasks/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/{task_id}/GET/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.GET..tasks.{task_id}"
+   }
+  },
+  "todolistapitaskstaskidGET34D76EF5": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": true,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-south-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "TodoListFunctionDE711C4E",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiResponseModel20731B8B"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiErrorResponseModelBA254C5D"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "400"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "todolistapitaskstaskid8B1D5B13"
+    },
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/{task_id}/GET/Resource"
+   }
+  },
+  "todolistapitaskstaskidPOSTApiPermissionTodoListAppStacktodolistapi6A487432POSTtaskstaskid81EC65BB": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/",
+       {
+        "Ref": "todolistapiDeploymentStageprod176B26AA"
+       },
+       "/POST/tasks/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/{task_id}/POST/ApiPermission.TodoListAppStacktodolistapi6A487432.POST..tasks.{task_id}"
+   }
+  },
+  "todolistapitaskstaskidPOSTApiPermissionTestTodoListAppStacktodolistapi6A487432POSTtaskstaskid711AC55D": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/test-invoke-stage/POST/tasks/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/{task_id}/POST/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.POST..tasks.{task_id}"
+   }
+  },
+  "todolistapitaskstaskidPOST8E65F747": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": true,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-south-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "TodoListFunctionDE711C4E",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiResponseModel20731B8B"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiErrorResponseModelBA254C5D"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "400"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "todolistapitaskstaskid8B1D5B13"
+    },
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/{task_id}/POST/Resource"
+   }
+  },
+  "todolistapitaskstaskidDELETEApiPermissionTodoListAppStacktodolistapi6A487432DELETEtaskstaskidDDA836FA": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/",
+       {
+        "Ref": "todolistapiDeploymentStageprod176B26AA"
+       },
+       "/DELETE/tasks/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/{task_id}/DELETE/ApiPermission.TodoListAppStacktodolistapi6A487432.DELETE..tasks.{task_id}"
+   }
+  },
+  "todolistapitaskstaskidDELETEApiPermissionTestTodoListAppStacktodolistapi6A487432DELETEtaskstaskid5F0D4B28": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/test-invoke-stage/DELETE/tasks/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/{task_id}/DELETE/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.DELETE..tasks.{task_id}"
+   }
+  },
+  "todolistapitaskstaskidDELETEB0D94C21": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": true,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "DELETE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-south-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "TodoListFunctionDE711C4E",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiResponseModel20731B8B"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiErrorResponseModelBA254C5D"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "400"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "todolistapitaskstaskid8B1D5B13"
+    },
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/tasks/{task_id}/DELETE/Resource"
+   }
+  },
+  "todolistapiusers7A4C2691": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "todolistapi68AF87AD",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "users",
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/users/Resource"
+   }
+  },
+  "todolistapiusersOPTIONSF6C3896F": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Api-Key,user_id,task_id'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,DELETE,OPTIONS'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiResponseModel20731B8B"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiErrorResponseModelBA254C5D"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "400"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "todolistapiusers7A4C2691"
+    },
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/users/OPTIONS/Resource"
+   }
+  },
+  "todolistapiusersGETApiPermissionTodoListAppStacktodolistapi6A487432GETusers2E0877C2": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/",
+       {
+        "Ref": "todolistapiDeploymentStageprod176B26AA"
+       },
+       "/GET/users"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/users/GET/ApiPermission.TodoListAppStacktodolistapi6A487432.GET..users"
+   }
+  },
+  "todolistapiusersGETApiPermissionTestTodoListAppStacktodolistapi6A487432GETusersAB5BAF1C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/test-invoke-stage/GET/users"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/users/GET/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.GET..users"
+   }
+  },
+  "todolistapiusersGETF6222B02": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": true,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-south-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "TodoListFunctionDE711C4E",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiResponseModel20731B8B"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiErrorResponseModelBA254C5D"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "400"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "todolistapiusers7A4C2691"
+    },
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/users/GET/Resource"
+   }
+  },
+  "todolistapiusersPOSTApiPermissionTodoListAppStacktodolistapi6A487432POSTusersF022FE1F": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/",
+       {
+        "Ref": "todolistapiDeploymentStageprod176B26AA"
+       },
+       "/POST/users"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/users/POST/ApiPermission.TodoListAppStacktodolistapi6A487432.POST..users"
+   }
+  },
+  "todolistapiusersPOSTApiPermissionTestTodoListAppStacktodolistapi6A487432POSTusersE4F6B563": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/test-invoke-stage/POST/users"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/users/POST/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.POST..users"
+   }
+  },
+  "todolistapiusersPOST7857B2C1": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": true,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-south-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "TodoListFunctionDE711C4E",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiResponseModel20731B8B"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiErrorResponseModelBA254C5D"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "400"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "todolistapiusers7A4C2691"
+    },
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/users/POST/Resource"
+   }
+  },
+  "todolistapiusersuseridEB6ECFDD": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "todolistapiusers7A4C2691"
+    },
+    "PathPart": "{user_id}",
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/users/{user_id}/Resource"
+   }
+  },
+  "todolistapiusersuseridOPTIONSFB5C5D19": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Api-Key,user_id,task_id'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,DELETE,OPTIONS'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiResponseModel20731B8B"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiErrorResponseModelBA254C5D"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "400"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "todolistapiusersuseridEB6ECFDD"
+    },
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/users/{user_id}/OPTIONS/Resource"
+   }
+  },
+  "todolistapiusersuseridPOSTApiPermissionTodoListAppStacktodolistapi6A487432POSTusersuserid8A12D2AB": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/",
+       {
+        "Ref": "todolistapiDeploymentStageprod176B26AA"
+       },
+       "/POST/users/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/users/{user_id}/POST/ApiPermission.TodoListAppStacktodolistapi6A487432.POST..users.{user_id}"
+   }
+  },
+  "todolistapiusersuseridPOSTApiPermissionTestTodoListAppStacktodolistapi6A487432POSTusersuserid1A8C17AA": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/test-invoke-stage/POST/users/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/users/{user_id}/POST/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.POST..users.{user_id}"
+   }
+  },
+  "todolistapiusersuseridPOSTA31424B0": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": true,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-south-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "TodoListFunctionDE711C4E",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiResponseModel20731B8B"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiErrorResponseModelBA254C5D"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "400"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "todolistapiusersuseridEB6ECFDD"
+    },
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/users/{user_id}/POST/Resource"
+   }
+  },
+  "todolistapiusersuseridDELETEApiPermissionTodoListAppStacktodolistapi6A487432DELETEusersuserid92D2EF33": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/",
+       {
+        "Ref": "todolistapiDeploymentStageprod176B26AA"
+       },
+       "/DELETE/users/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/users/{user_id}/DELETE/ApiPermission.TodoListAppStacktodolistapi6A487432.DELETE..users.{user_id}"
+   }
+  },
+  "todolistapiusersuseridDELETEApiPermissionTestTodoListAppStacktodolistapi6A487432DELETEusersuserid05BEB1BD": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TodoListFunctionDE711C4E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:ap-south-1:039612889764:",
+       {
+        "Ref": "todolistapi68AF87AD"
+       },
+       "/test-invoke-stage/DELETE/users/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/users/{user_id}/DELETE/ApiPermission.Test.TodoListAppStacktodolistapi6A487432.DELETE..users.{user_id}"
+   }
+  },
+  "todolistapiusersuseridDELETEC06898B9": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": true,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "DELETE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:ap-south-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "TodoListFunctionDE711C4E",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiResponseModel20731B8B"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "200"
+     },
+     {
+      "ResponseModels": {
+       "application/json": {
+        "Ref": "todolistapiTodoListApiErrorResponseModelBA254C5D"
+       }
+      },
+      "ResponseParameters": {
+       "method.response.header.Content-Type": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "400"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "todolistapiusersuseridEB6ECFDD"
+    },
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/Default/users/{user_id}/DELETE/Resource"
+   }
+  },
+  "todolistapitodolistusageplanD2E634E3": {
+   "Type": "AWS::ApiGateway::UsagePlan",
+   "Properties": {
+    "ApiStages": [
+     {
+      "ApiId": {
+       "Ref": "todolistapi68AF87AD"
+      },
+      "Stage": {
+       "Ref": "todolistapiDeploymentStageprod176B26AA"
+      },
+      "Throttle": {}
+     }
+    ],
+    "UsagePlanName": "todo-list-usage-plan"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/todo-list-usage-plan/Resource"
+   }
+  },
+  "todolistapitodolistusageplanUsagePlanKeyResourceTodoListAppStacktodolistapitodolistapikey5912AD19D30E5ED7": {
+   "Type": "AWS::ApiGateway::UsagePlanKey",
+   "Properties": {
+    "KeyId": {
+     "Ref": "todolistapitodolistapikey690B5397"
+    },
+    "KeyType": "API_KEY",
+    "UsagePlanId": {
+     "Ref": "todolistapitodolistusageplanD2E634E3"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/todo-list-usage-plan/UsagePlanKeyResource:TodoListAppStacktodolistapitodolistapikey5912AD19"
+   }
+  },
+  "todolistapitodolistapikey690B5397": {
+   "Type": "AWS::ApiGateway::ApiKey",
+   "Properties": {
+    "Enabled": true,
+    "Name": "todo-list-api-key",
+    "StageKeys": [
+     {
+      "RestApiId": {
+       "Ref": "todolistapi68AF87AD"
+      },
+      "StageName": {
+       "Ref": "todolistapiDeploymentStageprod176B26AA"
+      }
+     }
+    ],
+    "Value": "VGhpcyBpcyBhIFZlcnkgRWFzeSBQYXNzd29yZCAyMDAl"
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/todo-list-api-key/Resource"
+   }
+  },
+  "todolistapiTodoListApiResponseModel20731B8B": {
+   "Type": "AWS::ApiGateway::Model",
+   "Properties": {
+    "ContentType": "application/json",
+    "Name": "TodoListApiResponseModel",
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    },
+    "Schema": {
+     "$schema": "http://json-schema.org/draft-04/schema#",
+     "type": "object"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/TodoListApiResponseModel/Resource"
+   }
+  },
+  "todolistapiTodoListApiErrorResponseModelBA254C5D": {
+   "Type": "AWS::ApiGateway::Model",
+   "Properties": {
+    "ContentType": "application/json",
+    "Name": "TodoListApiErrorResponseModel",
+    "RestApiId": {
+     "Ref": "todolistapi68AF87AD"
+    },
+    "Schema": {
+     "$schema": "http://json-schema.org/draft-04/schema#",
+     "type": "object"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/todo-list-api/TodoListApiErrorResponseModel/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/21STW/CMAz9LdxDxkCTdi1Muwy0CrZdq5B4LJAmVT5AVdX/PifpoJM4+dmOn5/tzOnj8xOdTdjFTbk4TZXc027nGT8RDFWdZDXttkYBWX3rZEujJG+jm1FP3IJ2y8BP4GN0QNncHv/zs7NkDmJ11QlolGlr0J7m1Ms1QJhz4B0toumJYvVeMNoh45q1YL/AOmk02Ul9UOCNfg2a+xi5Anw6xiXYWrpY1BPRalYbgSN/sH2eMYGesEYemIcLa2m3Tj234HzRyLSHGyw4NwFVjgRjdOThLg+JOAMsNcFyiLOTDfgfI2JyQH/ZoUnGnw4LS8WS+vvOG7QEBUUTNWW0MQJUIo+g70fswXlT3232P1Vac5YCbFKbLhCnwFUPd6hUvEGFP4UrSYuLWymZzhI534NvAp5MY3t6dA/n+Qw/G11Mjk7KqcWtyRroNttfmpYDUogCAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "TodoListAppStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "todolistapiEndpointB502C690": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "todolistapi68AF87AD"
+      },
+      ".execute-api.ap-south-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "todolistapiDeploymentStageprod176B26AA"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

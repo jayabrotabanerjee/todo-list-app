@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+   <meta charset = "UTF-8">
+   <meta http-equiv = "X-UA-Compatible" content = "IE=edge">
+   <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+   <meta name = "author" content = "Web Developer | Shanelle Marasigan">
+   <title>
+      Todo List Application
+   </title>
+
+   <link rel = "stylesheet" href = "assets/css/bootstrap.min.css">
+</head>
+<body>
+   <nav class = "navbar navbar-expand-lg navbar-light bg-light">
+      <div class = "container-fluid">
+         <button class = "navbar-toggler" type = "button" data-bs-toggle = "collapse" data-bs-target = "#navbar-toggler" aria-controls = "navbar-toggler" aria-expanded = "false" aria-label = "Toggle navigation">
+            <span class = "navbar-toggler-icon"></span>
+         </button>
+         <div class = "collapse navbar-collapse" id = "navbar-toggler">
+            <a class = "navbar-brand" href = "#">
+               &#128466 Todo List
+            </a>
+            <ul class = "navbar-nav me-auto mb-2 mb-lg-0">
+               <li class = "nav-item">
+                  <a class = "nav-link active" href = "#">
+                     List
+                  </a>
+               </li>
+            </ul>
+            <div class = "d-flex">
+               <div class = "row">
+                  <div class = "col">
+                     <button class = "btn btn-primary" data-bs-toggle = "modal" data-bs-target = "#user-modal">
+                        <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" fill = "currentColor" class = "bi bi-person-circle" viewBox = "0 0 16 16">
+                           <path d = "M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                           <path fill-rule = "evenodd" d = "M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                        </svg>
+                        Account
+                      </button>
+                  </div>
+                  <div class = "col">
+                     <button class = "btn btn-danger btn-md" data-bs-toggle = "modal" data-bs-target = "#user-delete-modal">
+                        <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" fill = "currentColor" class = "bi bi-trash-fill" viewBox = "0 0 16 16">
+                           <path d = "M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                        </svg>
+                        Delete Account
+                      </button>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </nav>
+
+   <main class = "container-fluid">
+      <div class = "d-flex mt-3" style = "float: right">
+         <div class = "col">
+            <button class = "btn btn-success" data-bs-toggle = "modal" data-bs-target = "#new-task-modal">
+               + New Todo
+             </button>
+         </div>
+      </div>
+      <table class = "table table-stripped">
+         <thead>
+            <tr>
+               <th scope = "col">
+                  Title
+               </th>
+               <th scope = "col">
+                  Description
+               </th>
+               <th scope = "col">
+                  Status
+               </th>
+               <th scope = "col">
+                  Create Date
+               </th>
+               <th></th>
+               <th></th>
+            </tr>
+         </thead>
+         <tbody id = "tasks-tbody"></tbody>
+      </table>
+
+      <!-- New Task -->
+      <div class = "modal fade" id = "new-task-modal" tabindex = "-1" aria-labelledby = "new-task-modal-label" aria-hidden = "true">
+         <div class = "modal-dialog modal-lg">
+            <div class = "modal-content">
+               <div class = "modal-header">
+                  <h5 class = "modal-title" id = "new-task-modal-label">
+                     New Task
+                  </h5>
+                  <button class = "btn-close" type = "button" data-bs-dismiss = "modal" aria-label = "Close"></button>
+               </div>
+               <div class = "modal-body">
+                  <div class = "mb-3">
+                     <div class = "form-floating">
+                        <input type = "text" class = "form-control" id = "floatingInput" name = "new_task_title" placeholder = "Title" aria-label = "Title">
+                        <label for = "floatingInput">
+                           Title
+                        </label>
+                     </div>
+                  </div>
+                  <div class = "mb-3">
+                     <div class = "form-floating">
+                        <input type = "text" class = "form-control" id = "floatingInput" name = "new_task_description" placeholder = "Description" aria-label = "Description">
+                        <label for = "floatingInput">
+                           Description
+                        </label>
+                     </div>
+                  </div>
+                  <div class = "mb-3">
+                     <div class = "form-floating">
+                        <select class = "form-select" name = "new_task_status" id = "floatingInput" aria-label = "Status">
+                           <option value = "1" selected>
+                              Backlog
+                           </option>
+                           <option value = "2">
+                              In Progress
+                           </option>
+                           <option value = "3">
+                              Done
+                           </option>
+                        </select>
+                        <label for = "floatingInput">
+                           Status
+                        </label>
+                     </div>
+                  </div>
+               </div>
+               <div class = "modal-footer">
+                  <button class = "btn btn-primary fw-bolder" id = "btn-add-task">
+                     Add
+                  </button>
+                  <button class = "btn btn-secondary fw-bolder" type = "button" data-bs-dismiss = "modal" id = "btn-close-task">
+                     Close
+                  </button>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- View task -->
+      <div class = "modal fade" id = "task-modal" tabindex = "-1" aria-labelledby = "task-modal-label" aria-hidden = "true">
+         <div class = "modal-dialog modal-lg">
+            <div class = "modal-content">
+               <div class = "modal-header">
+                  <h5 class = "modal-title" id = "task-modal-label">
+                     Task
+                  </h5>
+                  <button class = "btn-close" type = "button" data-bs-dismiss = "modal" aria-label = "Close"></button>
+               </div>
+               <div class = "modal-body">
+                  <div class = "mb-3">
+                     <div class = "form-floating">
+                        <input type = "text" class = "form-control" id = "floatingInput" name = "task_title" placeholder = "Title" aria-label = "Title">
+                        <label for = "floatingInput">
+                           Title
+                        </label>
+                     </div>
+                  </div>
+                  <div class = "mb-3">
+                     <div class = "form-floating">
+                        <input type = "text" class = "form-control" id = "floatingInput" name = "task_description" placeholder = "Description" aria-label = "Description">
+                        <label for = "floatingInput">
+                           Description
+                        </label>
+                     </div>
+                  </div>
+                  <div class = "row mb3">
+                     <div class = "col">
+                        <div class = "form-floating">
+                           <select class = "form-select" name = "task_status" id = "floatingInput" aria-label = "Status">
+                              <option value = "1" selected>
+                                 Backlog
+                              </option>
+                              <option value = "2">
+                                 In Progress
+                              </option>
+                              <option value = "3">
+                                 Done
+                              </option>
+                           </select>
+                           <label for = "floatingInput">
+                              Status
+                           </label>
+                        </div>
+                     </div>
+                     <div class = "col">
+                        <div class = "form-floating">
+                           <input type = "text" class = "form-control" id = "floatingInput" name = "task_date_created" placeholder = "Date Created" aria-label = "Date Created" readonly>
+                           <label for = "floatingInput">
+                              Date Created
+                           </label>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class = "modal-footer">
+                  <button class = "btn btn-primary fw-bolder" type = "button" id = "btn-save-task">
+                     Save changes
+                  </button>
+                  <button class = "btn btn-secondary fw-bolder" type = "button" data-bs-dismiss = "modal">
+                     Close
+                  </button>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- User Details -->
+      <div class = "modal fade" id = "user-modal" tabindex = "-1" aria-labelledby = "user-modal-label" aria-hidden = "true">
+         <div class = "modal-dialog modal-lg">
+            <div class = "modal-content">
+               <div class = "modal-header">
+                  <h5 class = "modal-title" id = "user-modal-label">
+                     Account Details
+                  </h5>
+                  <button class = "btn-close" type = "button" data-bs-dismiss = "modal" aria-label = "Close"></button>
+               </div>
+               <div class = "modal-body">
+                  <div class = "row mb-3">
+                     <div class = "col">
+                        <div class = "form-floating">
+                           <input type = "text" class = "form-control" id = "floatingInput" name = "first_name" placeholder = "First Name" aria-label = "First Name">
+                           <label for = "floatingInput">
+                              First Name
+                           </label>
+                        </div>
+                     </div>
+                     <div class = "col">
+                        <div class = "form-floating">
+                           <input type = "text" class = "form-control" id = "floatingInput" name = "last_name" placeholder = "Last Name" aria-label = "Last Name">
+                           <label for = "floatingInput">
+                              Last Name
+                           </label>
+                        </div>
+                     </div>
+                  </div>
+                  <div class = "mb-3">
+                     <div class = "form-floating">
+                        <input type = "email" class = "form-control" id = "floatingInput" name = "email" placeholder = "Email" aria-label = "Email">
+                        <label for = "floatingInput">
+                           Email
+                        </label>
+                     </div>
+                  </div>
+                  <div class = "mb-3">
+                     <div class = "form-floating">
+                        <input type = "text" class = "form-control" id = "floatingInput" name = "user_name" placeholder = "Username" aria-label = "Username">
+                        <label for = "floatingInput">
+                           Username
+                        </label>
+                     </div>
+                  </div>
+               </div>
+               <div class = "modal-footer">
+                  <button class = "btn btn-primary fw-bolder" type = "button" id = "btn-user-acct-update">
+                     Update Account
+                  </button>
+                  <button class = "btn btn-secondary fw-bolder" type = "button" data-bs-dismiss = "modal">
+                     Close
+                  </button>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- Delete User Account -->
+      <div class = "modal fade" id = "user-delete-modal" tabindex = "-1" aria-labelledby = "user-delete-modal-label" aria-hidden = "true">
+         <div class = "modal-dialog">
+            <div class = "modal-content">
+               <div class = "modal-header">
+                  <h5 class = "modal-title" id = "user-delete-modal-label">
+                     <svg class = "mb-" xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" fill = "#dc3545" class = "bi bi-exclamation-octagon-fill" viewBox = "0 0 16 16">
+                        <path d = "M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353L11.46.146zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                      </svg>
+                     Delete Account
+                  </h5>
+                  <button class = "btn-close" type = "button" data-bs-dismiss = "modal" aria-label = "Close"></button>
+               </div>
+               <div class = "modal-body">
+                  Are you sure you want to delete your account?
+               </div>
+               <div class = "modal-footer">
+                  <button class = "btn btn-danger fw-bolder" type = "button" id = "btn-user-delete">
+                     Delete
+                  </button>
+                  <button class = "btn btn-secondary fw-bolder" type = "button" data-bs-dismiss = "modal">
+                     Close
+                  </button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </main>
+   <script src = "assets/js/bootstrap.bundle.min.js"></script>
+   <script>
+      let user_id = '';
+
+      // Modals
+      const user_modal_container = document.getElementById('user-modal');
+      const task_modal_container = document.getElementById('task-modal');
+      const new_task_modal_container = document.getElementById('new-task-modal');
+      const user_modal = new bootstrap.Modal(user_modal_container);
+      const task_modal = new bootstrap.Modal(task_modal_container);
+      const new_task_modal = new bootstrap.Modal(new_task_modal_container);
+
+      // Set-up HTTP Request
+      const xhr = new XMLHttpRequest();
+      // Retrieve the object from local storage
+      const API_KEY = localStorage.getItem('key');
+
+      // API URL
+      let TASK_URL = "https://xxxxxxxxxx.xxxxxxx.xx.xxxx.x.amazonaws.com/deployment_stage/tasks/";
+      let USER_URL = "https://xxxxxxxxxx.xxxxxxx.xx.xxxx.x.amazonaws.com/deployment_stage/users/";
+
+      // init_account initializes the user account
+      function init_account()
+      {
+         // Retrieve the object from local storage
+         let user = JSON.parse(localStorage.getItem('user'));
+         user_id = user.id;
+
+         // Set values to user input
+         document.querySelector('input[name=first_name]').value = user.first_name;
+         document.querySelector('input[name=last_name]').value = user.last_name;
+         document.querySelector('input[name=email]').value = user.email;
+         document.querySelector('input[name=user_name]').value = user.username;
+      }
+
+      function ClearInput(element)
+      {
+         input = document.querySelector(`${element} .modal-body`).querySelectorAll('input');
+         input.forEach(function(element)
+         {
+            element.value = '';
+         });
+      }
+      
+      // GetCookie returns the cookie value based on the passed cookie name
+      function GetCookie (cookie_name)
+      {
+         let cookie = {};
+         document.cookie.split(";").forEach(function (element)
+         {
+            let [key, value] = element.split('=');
+            cookie[key.trim()] = value;
+         });
+
+         return cookie[cookie_name];
+      }
+
+      // SetTaskStatus sets the task status value based on ID
+      function SetTaskStatus(task_status)
+      {
+         if (task_status == "Backlog")
+         {
+            return 1;
+         }
+         else if (task_status == "In Progress")
+         {
+            return 2
+         }
+         else
+         {
+            return 3;
+         }
+      }
+
+      // DeleteUserTasks deletes all tasks related to the user
+      function DeleteUserTasks()
+      {
+         xhr.onload = function() {
+            let response = JSON.parse(xhr.responseText);
+            if (xhr.status == 200)
+            {
+               window.location.href = "index.html";
+               // Remove object to local storage
+               localStorage.removeItem('key');
+               localStorage.removeItem('user');
+            }
+            else
+            {
+               alert(`Error: ${response.err_msg}`);
+            }
+         };
+         
+         // Delete all tasks for the said user
+         xhr.open('DELETE', TASK_URL);
+         xhr.setRequestHeader('user_id', user_id);
+         xhr.setRequestHeader('x-api-key', API_KEY);
+         xhr.setRequestHeader('Content-Type', 'application/json');
+         xhr.send();
+      }
+
+      init_account();
+      xhr.onload = function (){
+         let response = JSON.parse(xhr.responseText);
+
+         // Process our tasks return data
+         if (xhr.status == 200)
+         {
+            let tbody = document.getElementById('tasks-tbody');
+            if (response !== null)
+            {
+               for (const [key, value] of Object.entries(response))
+               {
+                  // Build elements that will be added to the innerHTML of our tbody
+                  let content = `<tr class = 'align-middle'>
+                                    <th scope = 'row'>${value.title}</th>
+                                    <th>${value.description}</th>
+                                    <th>${value.status}</th>
+                                    <th>${value.date_created}</th>
+                                    <th class = 'text-center'>
+                                       <button class = 'btn btn-lg btn-primary' id = 'btn-view-task' task-id = '${value.id}' onClick='ViewTask(${value.id})'>
+                                          <svg xmlns = 'http://www.w3.org/2000/svg' width = '16' height = '16' fill = 'currentColor' class = 'bi bi-eye-fill' viewBox = '0 0 16 16'>
+                                             <path d = 'M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z'/>
+                                             <path d = 'M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z'/>
+                                          </svg>
+                                          View
+                                       </button>
+                                    </th>
+                                    <th class = 'text-center'>
+                                       <button class = 'btn btn-lg btn-danger' task-id = '${value.id}' onClick='DeleteTask(${value.id})'>
+                                          <svg xmlns = 'http://www.w3.org/2000/svg' width = '16' height = '16' fill = 'currentColor' class = 'bi bi-trash-fill' viewBox = '0 0 16 16'>
+                                             <path d = 'M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z'/>
+                                          </svg>
+                                          Delete
+                                       </button>
+                                    </th>
+                                 </tr>`;
+                  tbody.innerHTML  += content;
+               }
+            }
+         }
+         else
+         {
+            alert(`Error: ${response.err_msg}`);
+         }
+      }
+
+      // Get all tasks for the said user
+      xhr.open('GET', TASK_URL);
+      xhr.setRequestHeader('user_id', user_id);
+      xhr.setRequestHeader('x-api-key', API_KEY);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send();
+
+      // ---------- events ---------- //
+      // Update user account
+      document.getElementById('btn-user-acct-update').addEventListener("click", function ()
+      {
+         let data = {};
+         data.first_name = document.querySelector('input[name=first_name]').value;
+         data.last_name = document.querySelector('input[name=last_name]').value;
+         data.email = document.querySelector('input[name=email]').value;
+         data.username = document.querySelector('input[name=user_name]').value;
+
+         // Set-up listener to process completed requests
+         xhr.onload = function (){
+            let response = JSON.parse(xhr.responseText);
+
+            // Process our return data
+            if (xhr.status == 200)
+            {
+               // Update object in local storage
+               localStorage.setItem('user', JSON.stringify(response));
+
+               init_account();
+               user_modal.hide();
+               alert(`You've successfully updated your account, ${response.first_name} ${response.last_name}`);
+            }
+            else
+            {
+               alert(`Error: ${response.err_msg}`);
+            }
+         };
+
+         // Create POST request
+         xhr.open('POST', `${USER_URL}?type=update`);
+
+         // Setting Request Header
+         xhr.setRequestHeader('user_id', user_id);
+         xhr.setRequestHeader('x-api-key', API_KEY);
+         xhr.setRequestHeader('Content-Type', 'application/json');
+
+         // Send POST
+         xhr.send(JSON.stringify(data));
+      });
+
+      // Delete a user account
+      document.getElementById('btn-user-delete').addEventListener("click", function ()
+      {
+          xhr.onload = function() {
+            let response = JSON.parse(xhr.responseText);
+             if (xhr.status == 200)
+             {
+               DeleteUserTasks();
+             }
+             else
+             {
+               alert(`Error: ${response.err_msg}`);
+             }
+          }
+
+          // Delete the said user account
+         xhr.open('DELETE', `${USER_URL}${user_id}`);
+         xhr.setRequestHeader('x-api-key', API_KEY);
+         xhr.setRequestHeader('Content-Type', 'application/json');
+         xhr.send();
+      });
+
+      // Add a new task
+      document.getElementById('btn-add-task').addEventListener("click", function ()
+      {
+         let data = {};
+         data.title = document.querySelector('input[name=new_task_title]').value;
+         data.description = document.querySelector('input[name=new_task_description]').value;
+         data.status = document.querySelector('select[name=new_task_status]').value;
+
+         xhr.onload = function() {
+            let response = JSON.parse(xhr.responseText);
+
+            if (xhr.status == 200)
+            {
+               let tbody = document.getElementById('tasks-tbody');
+
+               // Build elements that will be added to the innerHTML of our tbody
+               let content = `<tr class = 'align-middle'>
+                                    <th scope = 'row'>${response.title}</th>
+                                    <th>${response.description}</th>
+                                    <th>${response.status}</th>
+                                    <th>${response.date_created}</th>
+                                    <th class = 'text-center'>
+                                       <button class = 'btn btn-lg btn-primary' id = 'btn-view-task' task-id = '${response.id}' onClick='ViewTask(${response.id})'>
+                                          <svg xmlns = 'http://www.w3.org/2000/svg' width = '16' height = '16' fill = 'currentColor' class = 'bi bi-eye-fill' viewBox = '0 0 16 16'>
+                                             <path d = 'M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z'/>
+                                             <path d = 'M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z'/>
+                                          </svg>
+                                          View
+                                       </button>
+                                    </th>
+                                    <th class = 'text-center'>
+                                       <button class = 'btn btn-lg btn-danger' task-id = '${response.id}' onClick='DeleteTask(${response.id})'>
+                                          <svg xmlns = 'http://www.w3.org/2000/svg' width = '16' height = '16' fill = 'currentColor' class = 'bi bi-trash-fill' viewBox = '0 0 16 16'>
+                                             <path d = 'M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z'/>
+                                          </svg>
+                                          Delete
+                                       </button>
+                                    </th>
+                                 </tr>`;
+               
+               new_task_modal.hide();
+               tbody.innerHTML  += content;
+               ClearInput('#new-task-modal');
+               alert(`You've successfully created a new task: ${response.title}`);
+            }
+            else
+            {
+               alert(`Error ${response.err_msg}`);
+            }
+         }
+
+         xhr.open('POST', `${TASK_URL}?type=new`);
+         xhr.setRequestHeader('user_id', user_id);
+         xhr.setRequestHeader('x-api-key', API_KEY);
+         xhr.setRequestHeader('Content-Type', 'application/json');
+         xhr.send(JSON.stringify(data));
+      });
+      
+      // Close add task modal
+      document.getElementById("btn-close-task").addEventListener("click", function ()
+      {
+         new_task_modal.hide();
+         ClearInput('#new-task-modal');
+      });
+      
+      // Update task information
+      document.getElementById('btn-save-task').addEventListener("click", function ()
+      {
+         let data = {};
+         let task_id = GetCookie('task_id');
+         
+         data.title = document.querySelector('input[name=task_title]').value;
+         data.description = document.querySelector('input[name=task_description]').value;
+         data.status = document.querySelector('select[name=task_status]').value;
+
+         xhr.onload = function() {
+            let response = JSON.parse(xhr.responseText);
+            if (xhr.status == 200)
+            {
+               // Update table task information
+               let parent = document.querySelector(`button[task-id='${task_id}']`).parentElement.parentElement;
+               parent.children[0].innerHTML = response.title
+               parent.children[1].innerHTML = response.description;
+               parent.children[2].innerHTML = response.status;
+
+               task_modal.hide();
+               alert(`You've successfully update the task ${response.title}`);
+            }
+            else
+            {
+               alert(`Error: ${response.err_msg}`);
+            }
+         };
+
+         xhr.open('POST', `${TASK_URL}${task_id}/?type=update`);
+         xhr.setRequestHeader('x-api-key', API_KEY);
+         xhr.setRequestHeader('Content-Type', 'application/json');
+         xhr.send(JSON.stringify(data));
+      });
+
+      // ViewTask gets the task details and set values to designate
+      // input element for displaying
+      function ViewTask(id)
+      {
+         xhr.onload = function(){
+            let response = JSON.parse(xhr.responseText);
+            if (xhr.status == 200)
+            {
+               document.querySelector('input[name=task_title]').value = response.title;
+               document.querySelector('input[name=task_description]').value = response.description;
+               document.querySelector('select[name=task_status]').value = SetTaskStatus(response.status);
+               document.querySelector('input[name=task_date_created]').value = response.date_created;
+
+               document.cookie = `task_id=${id}`;
+               task_modal.show();
+            }
+            else
+            {
+               alert(`Error: ${response.err_msg}`);
+            }
+         };
+
+         // Get specific task for the said user
+         xhr.open('GET', `${TASK_URL}${id}`);
+         xhr.setRequestHeader('user_id', user_id);
+         xhr.setRequestHeader('x-api-key', API_KEY);
+         xhr.setRequestHeader('Content-Type', 'application/json');
+         xhr.send();
+      }
+
+      // DeleteTask deletes the specific task
+      function DeleteTask(id)
+      {
+         xhr.onload = function() {
+            let response = JSON.parse(xhr.responseText);
+            if (xhr.status == 200)
+            {
+               alert(`Sucessfully deleted ${response.title}`);
+               document.querySelector(`button[task-id='${id}']`).parentElement.parentElement.remove();
+            }
+            else
+            {
+               alert(`Error: ${response.err_msg}`);
+            }
+         }
+
+         // Delete the specific task
+         xhr.open('DELETE', `${TASK_URL}${id}`);
+         xhr.setRequestHeader('user_id', user_id);
+         xhr.setRequestHeader('x-api-key', API_KEY);
+         xhr.setRequestHeader('Content-Type', 'application/json');
+         xhr.send();
+      }
+   </script>
+</body>
+</html>
