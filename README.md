@@ -1,5 +1,5 @@
 # todo-list-app
-## A to do list app using AWS
+## a to do list app using AWS
 Here are a few screenshots : 
 
 
@@ -18,7 +18,5 @@ Bootstrapping :
 Deployment :
 
 ![CDK Deployment](pics/CDK%20deployment.png)
-
-
 
 ![Creation of objects in AWS](pics/creation%20of%20objects%20in%20AWS.png)
