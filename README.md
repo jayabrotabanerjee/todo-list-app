@@ -1,6 +1,6 @@
 # todo-list-app
 ## a to do list app using AWS
-** Here are a few screenshots : **
+**Here are a few screenshots :**
 
 
 ** CDK Synthesis : **
