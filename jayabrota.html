@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List - by Jayabrota Banerjee</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .todo-form {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .todo-form input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+        }
+        
+        .todo-form button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        li {
+            background-color: white;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        li.completed {
+            text-decoration: line-through;
+            color: #888;
+            background-color: #f9f9f9;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .delete-btn {
+            color: #ff4d4d;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .complete-btn {
+            color: #4CAF50;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+        }
+        
+        .aws-address {
+            background-color: #f8f8f8;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+            color: #555;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    
+    
+    <h1>Todo List</h1>
+    
+    <div class="todo-form">
+        <input type="text" id="new-task" placeholder="Add a new task...">
+        <button onclick="addTask()">Add</button>
+    </div>
+    
+    <ul id="task-list">
+        <li>
+            Setup AWS EC2 instance
+            <div class="actions">
+                <button class="complete-btn" onclick="toggleComplete(this.parentElement.parentElement)">✓</button>
+                <button class="delete-btn" onclick="deleteTask(this.parentElement.parentElement)">✕</button>
+            </div>
+        </li>
+        <li>
+            Configure security groups
+            <div class="actions">
+                <button class="complete-btn" onclick="toggleComplete(this.parentElement.parentElement)">✓</button>
+                <button class="delete-btn" onclick="deleteTask(this.parentElement.parentElement)">✕</button>
+            </div>
+        </li>
+        <li>
+            Deploy web application
+            <div class="actions">
+                <button class="complete-btn" onclick="toggleComplete(this.parentElement.parentElement)">✓</button>
+                <button class="delete-btn" onclick="deleteTask(this.parentElement.parentElement)">✕</button>
+            </div>
+        </li>
+    </ul>
+    
+    <div class="footer">
+        <p>Created by Jayabrota Banerjee</p>
+        <p>Cloud Mini Project for CSBS 3rd year</p>
+    </div>
+    
+    <script>
+        function addTask() {
+            const taskInput = document.getElementById('new-task');
+            const taskText = taskInput.value.trim();
+            
+            if (taskText === '') return;
+            
+            const taskList = document.getElementById('task-list');
+            const newTask = document.createElement('li');
+            
+            newTask.innerHTML = `
+                ${taskText}
+                <div class="actions">
+                    <button class="complete-btn" onclick="toggleComplete(this.parentElement.parentElement)">✓</button>
+                    <button class="delete-btn" onclick="deleteTask(this.parentElement.parentElement)">✕</button>
+                </div>
+            `;
+            
+            taskList.appendChild(newTask);
+            taskInput.value = '';
+        }
+        
+        function deleteTask(taskElement) {
+            taskElement.remove();
+        }
+        
+        function toggleComplete(taskElement) {
+            taskElement.classList.toggle('completed');
+        }
+    </script>
+</body>
+</html>
