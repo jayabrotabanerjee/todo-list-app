@@ -21,6 +21,7 @@
 
 ![Creation of objects in AWS](pics/creation%20of%20objects%20in%20AWS.png)
 
+![todo list html page](pics/todolist.png)
 
 
 
